@@ -15,7 +15,4 @@ setup-tests:  ## Install python requirements
 	pip install -r requirements.txt
 
 test: clean lint  ## Run tests
-	py.test . -vsx
-
-test-coverage: clean lint  ## Run test coverage
-	py.test -vsx .  --cov . --no-cov-on-fail
+	tox
