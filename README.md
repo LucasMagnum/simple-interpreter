@@ -40,12 +40,12 @@ To properly run this interpreter, you should install the dependencies:
 
 ### 2. Running tests
 
-This interpreter was built using TDD and BDD, you can run the tests with the following commands:
+We have two kinds of tests implemented: unit tests and behaviour tests. You can run the tests with the following commands:
 
   ```bash
-  make tests
+  make tests   # Run both unit and behaviour tests
   make unit-tests
-  make behavior-tests
+  make behaviour-tests
   ```
 
 ### 3. Running the web application
