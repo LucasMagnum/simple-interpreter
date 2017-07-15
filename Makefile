@@ -11,8 +11,20 @@ help:  ## This help
 lint:  ## Lint project
 	flake8
 
+setup: setup-tests  ## Install dependencies
+
+
 setup-tests:  ## Install python requirements
 	pip install -r requirements.txt
 
-test: clean lint  ## Run tests
+tests: clean lint ## Run tests
 	tox
+
+unit-tests:  ## Run only unit tests
+	py.test -vsx tests/unit/
+
+unit-tests-coverage:  ## Run coverage on unit tests
+	py.test -vsx tests/unit/ --cov interpreter/ --no-cov-on-fail
+
+behaviour-tests:  ## Run only behaviour tests
+	behave tests/behaviour/
