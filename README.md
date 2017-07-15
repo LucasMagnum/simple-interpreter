@@ -8,15 +8,15 @@ This is an experiment project, the aim is have fun and learn more compilers & in
 
 ### How to use it
 
-  You can run this interpreter by command line or the web version.
+You can run this interpreter by command line or the web version.
 
-  Basically, you have to follow the steps bellow:
+Basically, you have to follow the steps bellow:
 
-    1. Clone this repository
-    2. Install all dependencies (see [setup](#1-setup))
-    3. Command line:
-        python simple_interpreter.py pascal_file.pas
-    4. Web version (see [web version](#3-running-the-application))
+1. Clone this repository
+2. Install all dependencies (see [setup](#1-setup))
+3. Command line:
+    python simple_interpreter.py pascal_file.pas
+4. Web version (see [web version](#3-running-the-web-application))
 
 
 ### Table of Contents
