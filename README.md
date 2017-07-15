@@ -2,8 +2,8 @@ Simple Interpreter
 ==================
 
 Simple interpreter for Pascal language built using Python.
-This interpreter was built following the `Let's Build a Simple Interpreter` serie.
-
+This interpreter was built following the `Let's Build a Simple Interpreter` tutorial.
+This is an experiment project, the aim is have fun and learn more compilers & interpreters.
 
 
 ### How to use it
