@@ -21,7 +21,7 @@ jobs:
           - v1-dependencies-
 
       - run:
-          name: install dependencies
+          name: Install dependencies
           command: |
             python3 -m venv venv
             . venv/bin/activate
@@ -31,14 +31,14 @@ jobs:
           paths:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
-        
+  
       - run:
-          name: run tests
+          name: Run tests
           command: |
             . venv/bin/activate
             make tests
+            bash <(curl -s https://codecov.io/bash)
 
       - store_artifacts:
           path: test-reports
-          destination: test-reports
-          
+          destination: test-reports            

@@ -1,6 +1,9 @@
 Simple Interpreter
 ==================
 
+[![CircleCI](https://circleci.com/gh/LucasMagnum/simple-interpreter.svg?style=shield)](https://circleci.com/gh/LucasMagnum/simple-interpreter)
+[![codecov](https://codecov.io/gh/LucasMagnum/simple-interpreter/branch/master/graph/badge.svg)](https://codecov.io/gh/LucasMagnum/simple-interpreter)
+
 Simple interpreter for Pascal language built using Python.
 This interpreter was built following the `Let's Build a Simple Interpreter` tutorial.
 This is an experiment project, the aim is have fun and learn more compilers & interpreters.
