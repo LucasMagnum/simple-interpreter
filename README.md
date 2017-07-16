@@ -6,27 +6,27 @@ Simple Interpreter
 
 Simple interpreter for Pascal language built using Python.
 This interpreter was built following the `Let's Build a Simple Interpreter` tutorial.
-This is an experiment project, the aim is have fun and learn more compilers & interpreters.
+This is an experiment project, the aim is have fun and learn more about compilers & interpreters.
 
 
 ### How to use it
 
-You can run this interpreter by command line or the web version.
+This interpreter can either process a file or run in the REPL mode.
 
-Basically, you have to follow the steps bellow:
+Basically, we have to follow the steps bellow:
 
 1. Clone this repository
 2. Install all dependencies (see [setup](#1-setup))
-3. Command line:
-    python simple_interpreter.py pascal_file.pas
-4. Web version (see [web version](#3-running-the-web-application))
+3. Process a Pascal file (see [process a file](#3-processing-a-pascal-file))
+4. REPL version (see [REPL version](#4-repl))
 
 
 ### Table of Contents
 
   * [1. Setup](#1-setup)
   * [2. Running tests](#2-running-tests)
-  * [3. Running the web application](#3-running-the-web-application)
+  * [3. Processing a Pascal file](#3-processing-a-pascal-file)
+  * [4. REPL](#4-repl)
   * [Useful links](#useful-links)
 
 ---
@@ -35,7 +35,7 @@ Basically, you have to follow the steps bellow:
 
 ### 1. Setup
 
-To properly run this interpreter, you should install the dependencies:
+To properly run this interpreter, we should install the dependencies:
 
   ```bash
   make setup
@@ -43,7 +43,7 @@ To properly run this interpreter, you should install the dependencies:
 
 ### 2. Running tests
 
-We have two kinds of tests implemented: unit tests and behaviour tests. You can run the tests with the following commands:
+We have two kinds of tests implemented: unit tests and behaviour tests. We can run the tests with the following commands:
 
   ```bash
   make tests   # Run both unit and behaviour tests
@@ -51,14 +51,23 @@ We have two kinds of tests implemented: unit tests and behaviour tests. You can 
   make behaviour-tests
   ```
 
-### 3. Running the web application
+### 3. Processing a Pascal file
   
-You can run the application and see the web version of this interpreter.
-Just run the command bellow:
+We can run the application and see the web version of this interpreter.
+Just have to run the command bellow:
   
   ```bash
-  make run
+  make run <filename>.pas
   ```
+
+### 4. REPL
+
+This interpreter also has a REPL mode that can be enable with the following command:
+
+  ```bash
+  make run-repl
+  ``
+
 
 ### Useful links
 

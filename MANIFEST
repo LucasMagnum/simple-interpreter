@@ -2,3 +2,6 @@
 setup.cfg
 setup.py
 interpreter/__init__.py
+interpreter/command_line.py
+interpreter/interpreter.py
+interpreter/tokens.py

@@ -6,7 +6,7 @@ import interpreter
 
 
 setup(
-    name='Simple interpreter',
+    name='simple interpreter',
     version=interpreter.__version__,
     description='Simple interpreter for Pascal language.',
     author='Lucas Magnum',
