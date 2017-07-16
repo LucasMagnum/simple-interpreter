@@ -66,8 +66,7 @@ This interpreter also has a REPL mode that can be enable with the following comm
 
   ```bash
   make run-repl
-  ```
-
+  ```
 
 ### Useful links
 
