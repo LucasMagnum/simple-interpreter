@@ -16,3 +16,13 @@ Feature: Calculator simulator
         Given I import the interpreter
         When I type "12 - 3" and execute
         Then I should see "9"
+
+    Scenario: divide 2 numbers
+        Given I import the interpreter
+        When I type "12 / 3" and execute
+        Then I should see "4.0"
+
+    Scenario: multiply 2 numbers
+        Given I import the interpreter
+        When I type "4 * 3" and execute
+        Then I should see "12"

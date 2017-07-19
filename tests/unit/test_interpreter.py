@@ -1,7 +1,6 @@
 import pytest
 
-from interpreter import Interpreter
-from interpreter.tokens import INTEGER, PLUS, MINUS, EOF
+from interpreter import Interpreter, tokens
 
 
 def test_error_should_raise_exception():
@@ -30,16 +29,28 @@ def test_execute_subtracts_two_numbers_with_space_betwen_them():
     assert interpreter.execute() == 0
 
 
+def test_execute_multiply_two_numbers_with_space_betwen_them():
+    """Execute should evaluate the expression correctly."""
+    interpreter = Interpreter("10 * 10")
+    assert interpreter.execute() == 100
+
+
+def test_execute_divide_two_numbers_with_space_betwen_them():
+    """Execute should evaluate the expression correctly."""
+    interpreter = Interpreter("100 / 10")
+    assert interpreter.execute() == 10
+
+
 def test_eat_change_current_token():
     """Eat should pass to a next token."""
     interpreter = Interpreter("2+3")
     interpreter.current_token = interpreter.get_next_token()
 
-    assert interpreter.current_token.token_type == INTEGER
+    assert interpreter.current_token.token_type == tokens.INTEGER
 
-    interpreter.eat(INTEGER)
+    interpreter.eat(tokens.INTEGER)
 
-    assert interpreter.current_token.token_type == PLUS
+    assert interpreter.current_token.token_type == tokens.PLUS
     assert interpreter.current_token.value == "+"
 
 
@@ -48,10 +59,10 @@ def test_eat_raise_exception_on_fail():
     interpreter = Interpreter("2+3")
     interpreter.current_token = interpreter.get_next_token()
 
-    assert interpreter.current_token.token_type == INTEGER
+    assert interpreter.current_token.token_type == tokens.INTEGER
 
     with pytest.raises(Exception):
-        interpreter.eat(PLUS)
+        interpreter.eat(tokens.PLUS)
 
 
 def test_get_next_token_returns_eof():
@@ -60,7 +71,7 @@ def test_get_next_token_returns_eof():
 
     next_token = interpreter.get_next_token()
 
-    assert next_token.token_type == EOF
+    assert next_token.token_type == tokens.EOF
     assert next_token.value is None
 
 
@@ -70,7 +81,7 @@ def test_get_next_token_ignore_whitespace_and_return_eof():
 
     next_token = interpreter.get_next_token()
 
-    assert next_token.token_type == EOF
+    assert next_token.token_type == tokens.EOF
     assert next_token.value is None
 
 
@@ -80,7 +91,7 @@ def test_get_next_token_returns_integer():
 
     next_token = interpreter.get_next_token()
 
-    assert next_token.token_type == INTEGER
+    assert next_token.token_type == tokens.INTEGER
     assert next_token.value == 1
 
 
@@ -90,7 +101,7 @@ def test_get_next_token_returns_plus():
 
     next_token = interpreter.get_next_token()
 
-    assert next_token.token_type == PLUS
+    assert next_token.token_type == tokens.PLUS
     assert next_token.value == "+"
 
 
@@ -100,13 +111,33 @@ def test_get_next_token_recognizes_minus():
 
     next_token = interpreter.get_next_token()
 
-    assert next_token.token_type == MINUS
+    assert next_token.token_type == tokens.MINUS
     assert next_token.value == "-"
+
+
+def test_get_next_token_recognizes_mul():
+    """Get next token should convert mult signal to it token."""
+    interpreter = Interpreter("*")
+
+    next_token = interpreter.get_next_token()
+
+    assert next_token.token_type == tokens.MUL
+    assert next_token.value == "*"
+
+
+def test_get_next_token_recognizes_div():
+    """Get next token should convert div signal to it token."""
+    interpreter = Interpreter("/")
+
+    next_token = interpreter.get_next_token()
+
+    assert next_token.token_type == tokens.DIV
+    assert next_token.value == "/"
 
 
 def test_get_next_token_should_raise_exception_on_fail():
     """When get next token fails should raise exception."""
-    interpreter = Interpreter("/")
+    interpreter = Interpreter("$")
 
     with pytest.raises(Exception):
         interpreter.get_next_token()

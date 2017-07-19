@@ -1,7 +1,8 @@
 """Token representation."""
 
 # token types
-INTEGER, PLUS, MINUS, EOF = 'INTEGER', 'PLUS', 'MINUS', 'EOF'
+INTEGER, PLUS, MINUS, MUL, DIV, EOF = 'INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', 'EOF'
+OPERATORS = [MUL, DIV, PLUS, MINUS]
 
 
 class Token(object):

@@ -1,6 +1,6 @@
 import operator
 
-from .tokens import Token, EOF, INTEGER, MINUS, PLUS
+from .tokens import Token, EOF, INTEGER, MINUS, PLUS, DIV, MUL, OPERATORS
 
 
 class Interpreter(object):
@@ -12,6 +12,7 @@ class Interpreter(object):
         self.pos = 0
         # current token instance
         self.current_token = None
+        self.current_char = self.text[self.pos] if self.text else None
 
     def execute(self):
         """execute -> INTEGER PLUS INTEGER"""
@@ -24,7 +25,7 @@ class Interpreter(object):
 
         # we expect the current token to be a '+' token
         op = self.current_token
-        self.eat([PLUS, MINUS])
+        self.eat(OPERATORS)
 
         # we expect the current token to be a single-digit integer
         right = self.current_token
@@ -38,7 +39,9 @@ class Interpreter(object):
         # effectively interpreting client input
         operators = {
             PLUS: operator.add,
-            MINUS: operator.sub
+            MINUS: operator.sub,
+            MUL: operator.mul,
+            DIV: operator.truediv
         }
         result = operators[op.token_type](left.value, right.value)
         return result
@@ -92,13 +95,17 @@ class Interpreter(object):
             self.pos += 1
             return token
 
-        if current_char == '+':
-            token = Token(PLUS, current_char)
-            self.pos += 1
-            return token
+        operators = {
+            '+': PLUS,
+            '-': MINUS,
+            '*': MUL,
+            '/': DIV
+        }
 
-        if current_char == '-':
-            token = Token(MINUS, current_char)
+        operator = operators.get(current_char)
+
+        if operator is not None:
+            token = Token(operator, current_char)
             self.pos += 1
             return token
 
