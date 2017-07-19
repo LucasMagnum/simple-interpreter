@@ -1,11 +1,13 @@
-from .tokens import Token, EOF, INTEGER, PLUS
+import operator
+
+from .tokens import Token, EOF, INTEGER, MINUS, PLUS
 
 
 class Interpreter(object):
 
     def __init__(self, text):
         # client string input, e.g. "3+5"
-        self.text = text
+        self.text = text.replace(" ", "") if text else text
         # self.pos is an index into self.text
         self.pos = 0
         # current token instance
@@ -21,8 +23,8 @@ class Interpreter(object):
         self.eat(INTEGER)
 
         # we expect the current token to be a '+' token
-        self.current_token
-        self.eat(PLUS)
+        op = self.current_token
+        self.eat([PLUS, MINUS])
 
         # we expect the current token to be a single-digit integer
         right = self.current_token
@@ -34,15 +36,22 @@ class Interpreter(object):
         # has been successfully found and the method can just
         # return the result of adding two integers, thus
         # effectively interpreting client input
-        result = left.value + right.value
+        operators = {
+            PLUS: operator.add,
+            MINUS: operator.sub
+        }
+        result = operators[op.token_type](left.value, right.value)
         return result
 
-    def eat(self, token_type):
+    def eat(self, token_types):
         # compare the current token type with the passed token
         # type and if they match then "eat" the current token
         # and assign the next token to the self.current_token,
         # otherwise raise an exception.
-        if self.current_token.token_type == token_type:
+        if not isinstance(token_types, (list, tuple)):
+            token_types = [token_types]
+
+        if self.current_token.token_type in token_types:
             self.current_token = self.get_next_token()
         else:
             self.error()
@@ -69,6 +78,15 @@ class Interpreter(object):
         # integer, create an INTEGER token, increment self.pos
         # index to point to the next character after the digit,
         # and return the INTEGER token
+        while current_char.isdigit() and self.pos < len(text) - 1:
+            next_char = text[self.pos + 1]
+
+            if next_char.isdigit():
+                current_char += next_char
+                self.pos += 1
+            else:
+                break
+
         if current_char.isdigit():
             token = Token(INTEGER, int(current_char))
             self.pos += 1
@@ -76,6 +94,11 @@ class Interpreter(object):
 
         if current_char == '+':
             token = Token(PLUS, current_char)
+            self.pos += 1
+            return token
+
+        if current_char == '-':
+            token = Token(MINUS, current_char)
             self.pos += 1
             return token
 
