@@ -3,6 +3,14 @@ import operator
 from .tokens import Token, EOF, INTEGER, MINUS, PLUS, DIV, MUL, OPERATORS
 
 
+operatorions = {
+    PLUS: operator.add,
+    MINUS: operator.sub,
+    MUL: operator.mul,
+    DIV: operator.truediv
+}
+
+
 class Interpreter(object):
 
     def __init__(self, text):
@@ -12,39 +20,24 @@ class Interpreter(object):
         self.pos = 0
         # current token instance
         self.current_token = None
-        self.current_char = self.text[self.pos] if self.text else None
 
     def execute(self):
-        """execute -> INTEGER PLUS INTEGER"""
+        """execute -> INTEGER OP INTEGER"""
         # set current token to the first token taken from the input
         self.current_token = self.get_next_token()
 
-        # we expect the current token to be a single-digit integer
         left = self.current_token
         self.eat(INTEGER)
 
-        # we expect the current token to be a '+' token
-        op = self.current_token
-        self.eat(OPERATORS)
+        while self.current_token.token_type != EOF:
+            op = self.current_token
+            self.eat(OPERATORS)
 
-        # we expect the current token to be a single-digit integer
-        right = self.current_token
-        self.eat(INTEGER)
-        # after the above call the self.current_token is set to
-        # EOF token
+            right = self.current_token
+            self.eat(INTEGER)
 
-        # at this point INTEGER PLUS INTEGER sequence of tokens
-        # has been successfully found and the method can just
-        # return the result of adding two integers, thus
-        # effectively interpreting client input
-        operators = {
-            PLUS: operator.add,
-            MINUS: operator.sub,
-            MUL: operator.mul,
-            DIV: operator.truediv
-        }
-        result = operators[op.token_type](left.value, right.value)
-        return result
+            left.value = operatorions[op.token_type](left.value, right.value)
+        return left.value
 
     def eat(self, token_types):
         # compare the current token type with the passed token
