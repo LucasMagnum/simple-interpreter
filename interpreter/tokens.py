@@ -1,18 +1,26 @@
 """Token representation."""
 
+import operator
+
+
 # token types
-INTEGER, PLUS, MINUS, MUL, DIV, EOF = (
-    'INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', 'EOF'
-)
-OPERATORS = [MUL, DIV, PLUS, MINUS]
+INTEGER = 'INTEGER'
+operations = {
+    '+': {'type': 'PLUS', 'func': operator.add},
+    '-': {'type': 'MINUS', 'func': operator.sub},
+    '*': {'type': 'MUL', 'func': operator.mul},
+    '/': {'type': 'DIV', 'func': operator.truediv}
+}
 
 
 class Token(object):
+
     def __init__(self, token_type, value):
-        # token type: INTEGER, PLUS, or EOF
         self.token_type = token_type
-        # token value: 0, 1, 2. 3, 4, 5, 6, 7, 8, 9, '+', or None
         self.value = value
+        self.func = (operations[value]['func']
+                     if value in operations
+                     else None)
 
     def __str__(self):
         """String representation of the class instance.
@@ -28,3 +36,31 @@ class Token(object):
 
     def __repr__(self):
         return self.__str__()
+
+
+def parse_tokens(text):
+    """Parse text and return next token."""
+    token = ''
+
+    clean_text = text.replace(" ", "")
+
+    for pos, term in enumerate(clean_text):
+        if term.isdigit():
+            token += term
+            if pos < len(clean_text) - 1:
+                continue
+
+        if token.isdigit():
+            yield Token(INTEGER, int(token))
+            token = ''
+
+        operation = operations.get(term)
+
+        if operation is not None:
+            yield Token(operation['type'], term)
+            continue
+
+        if not term.isdigit() and term not in operations:
+            raise Exception("Error while parsing tokens")
+
+    raise StopIteration

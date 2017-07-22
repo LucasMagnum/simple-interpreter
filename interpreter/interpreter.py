@@ -1,108 +1,26 @@
-import operator
 
-from .tokens import Token, EOF, INTEGER, MINUS, PLUS, DIV, MUL, OPERATORS
-
-
-operatorions = {
-    PLUS: operator.add,
-    MINUS: operator.sub,
-    MUL: operator.mul,
-    DIV: operator.truediv
-}
+from .tokens import parse_tokens
 
 
 class Interpreter(object):
 
     def __init__(self, text):
-        # client string input, e.g. "3+5"
-        self.text = text.replace(" ", "") if text else text
-        # self.pos is an index into self.text
-        self.pos = 0
-        # current token instance
-        self.current_token = None
+        self.text = text
 
     def execute(self):
-        """execute -> INTEGER OP INTEGER"""
-        # set current token to the first token taken from the input
-        self.current_token = self.get_next_token()
+        """Get the tokens and evaluate the result."""
+        result = 0
+        op = None
 
-        left = self.current_token
-        self.eat(INTEGER)
+        for token in parse_tokens(self.text):
+            if token.func:
+                op = token.func
+                continue
 
-        while self.current_token.token_type != EOF:
-            op = self.current_token
-            self.eat(OPERATORS)
+            if op:
+                result = op(result, token.value)
+                continue
 
-            right = self.current_token
-            self.eat(INTEGER)
+            result = token.value
 
-            left.value = operatorions[op.token_type](left.value, right.value)
-        return left.value
-
-    def eat(self, token_types):
-        # compare the current token type with the passed token
-        # type and if they match then "eat" the current token
-        # and assign the next token to the self.current_token,
-        # otherwise raise an exception.
-        if not isinstance(token_types, (list, tuple)):
-            token_types = [token_types]
-
-        if self.current_token.token_type in token_types:
-            self.current_token = self.get_next_token()
-        else:
-            self.error()
-
-    def get_next_token(self):
-        """Lexical analyzer (also known as scanner or tokenizer)
-
-        This method is responsible for breaking a sentence
-        apart into tokens. One token at a time.
-        """
-        text = self.text
-
-        # is self.pos index past the end of the self.text ?
-        # if so, then return EOF token because there is no more
-        # input left to convert into tokens
-        if self.pos > len(text) - 1:
-            return Token(EOF, None)
-
-        # get a character at the position self.pos and decide
-        # what token to create based on the single character
-        current_char = text[self.pos]
-
-        # if the character is a digit then convert it to
-        # integer, create an INTEGER token, increment self.pos
-        # index to point to the next character after the digit,
-        # and return the INTEGER token
-        while current_char.isdigit() and self.pos < len(text) - 1:
-            next_char = text[self.pos + 1]
-
-            if next_char.isdigit():
-                current_char += next_char
-                self.pos += 1
-            else:
-                break
-
-        if current_char.isdigit():
-            token = Token(INTEGER, int(current_char))
-            self.pos += 1
-            return token
-
-        operators = {
-            '+': PLUS,
-            '-': MINUS,
-            '*': MUL,
-            '/': DIV
-        }
-
-        operator = operators.get(current_char)
-
-        if operator is not None:
-            token = Token(operator, current_char)
-            self.pos += 1
-            return token
-
-        self.error()
-
-    def error(self):
-        raise Exception('Error parsing input')
+        return result
