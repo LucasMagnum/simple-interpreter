@@ -68,6 +68,24 @@ This interpreter also has a REPL mode that can be enable with the following comm
   make run-repl
   ```
 
+### Running inside docker
+
+  To run this interpreter inside docker, we have to follow the commands bellow:
+
+    1. Install docker
+    2. Build simple interpreter image
+
+      ```bash
+      docker build -t simple-interpreter
+      ```
+
+    3. Run commands using docker
+
+      ```bash
+      docker run -i -v `pwd`:/simple-interpreter make tests
+      ```
+
+
 ### Useful links
 
   1 - [Let's build a simple interpreter](https://ruslanspivak.com/lsbasi-part1/)
