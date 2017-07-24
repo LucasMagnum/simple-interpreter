@@ -70,16 +70,16 @@ This interpreter also has a REPL mode that can be enable with the following comm
 
 ### Running inside docker
 
-  To run this interpreter inside docker, we have to follow the commands bellow:
+To run this interpreter inside docker, we have to follow the commands bellow:
 
-    1. Install docker
-    2. Build simple interpreter image
+1. Install docker
+2. Build simple interpreter image
 
-      ```bash
-      docker build -t simple-interpreter
-      ```
+     ```bash
+     docker build -t simple-interpreter
+     ```
 
-    3. Run commands using docker
+3. Run commands using docker
 
       ```bash
       docker run -i -v `pwd`:/simple-interpreter make tests
