@@ -4,4 +4,5 @@ setup.py
 interpreter/__init__.py
 interpreter/command_line.py
 interpreter/interpreter.py
+interpreter/lexer.py
 interpreter/tokens.py

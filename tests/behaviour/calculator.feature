@@ -27,7 +27,12 @@ Feature: Calculator simulator
         When I type "3 * 3 * 3" and execute
         Then I should see "27"
 
-    Scenario: mix operations with 3 numbers without precedence
+    Scenario: mix operations with 3 numbers with precedence
         Given I import the interpreter
         When I type "3 + 3 * 2" and execute
-        Then I should see "12"
+        Then I should see "9"
+
+    Scenario: mix operations with 4 numbers and precedence
+        Given I import the interpreter
+        When I type "2 * 2 + 2 / 2" and execute
+        Then I should see "5.0"
