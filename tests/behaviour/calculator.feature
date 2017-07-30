@@ -36,3 +36,8 @@ Feature: Calculator simulator
         Given I import the interpreter
         When I type "2 * 2 + 2 / 2" and execute
         Then I should see "5.0"
+
+    Scenario: nested operations
+        Given I import the interpreter
+        When I type "2 * (3 + 1) * 2" and execute
+        Then I should see "16"

@@ -1,4 +1,6 @@
-from .tokens import Token, INTEGER, PLUS, MINUS, MUL, DIV, EOF
+from .tokens import (
+    Token, INTEGER, PLUS, MINUS, MUL, DIV, RPAREN, LPAREN, EOF
+)
 
 
 class Lexer(object):
@@ -61,6 +63,14 @@ class Lexer(object):
             if self.current_char == '/':
                 self.advance()
                 return Token(DIV, '/')
+
+            if self.current_char == '(':
+                self.advance()
+                return Token(LPAREN, '(')
+
+            if self.current_char == ')':
+                self.advance()
+                return Token(RPAREN, ')')
 
             self.error()
 

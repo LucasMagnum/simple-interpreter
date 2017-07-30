@@ -44,6 +44,12 @@ def test_expr_subtracts_two_numbers_with_space_betwen_them():
     assert interpreter.expr() == 0
 
 
+def test_expr_multiply():
+    """Expr should evaluate the expression correctly."""
+    interpreter = Interpreter(Lexer("10 * 10 * 10 "))
+    assert interpreter.expr() == 1000
+
+
 def test_expr_multiply_two_numbers_with_space_betwen_them():
     """Expr should evaluate the expression correctly."""
     interpreter = Interpreter(Lexer("10 + 10 * 10 "))
@@ -54,3 +60,9 @@ def test_expr_divide_two_numbers_with_space_betwen_them():
     """Expr should evaluate the expression correctly."""
     interpreter = Interpreter(Lexer("100 / 10 * 1"))
     assert interpreter.expr() == 10
+
+
+def test_expr_with_nested_operations():
+    """Expr should handle nested operations."""
+    interpreter = Interpreter(Lexer("10 + (10 * 10) / (2 * 5)"))
+    assert interpreter.expr() == 20
