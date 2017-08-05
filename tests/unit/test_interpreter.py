@@ -1,68 +1,47 @@
 import pytest
 
-from interpreter import Interpreter
+from interpreter.ast import Num
+from interpreter.interpreter import Interpreter, NodeVisitor
 from interpreter.lexer import Lexer
+from interpreter.parser import Parser
+from interpreter.tokens import Token, INTEGER
 
 
-def test_error():
-    """Should raise exception."""
-    interpreter = Interpreter(Lexer("1 1"))
+class TestNodeVisitor(object):
+    num_token = Num(Token(INTEGER, 1))
 
-    with pytest.raises(Exception):
-        interpreter.error()
+    def test_generic_visit_raise_exception(self):
+        node = NodeVisitor()
 
+        with pytest.raises(Exception):
+            node.generic_visit(self.num_token)
 
-def test_eat_trown_an_error():
-    """Should raise exception."""
-    interpreter = Interpreter(Lexer("1"))
+    def test_visit_raise_exception_when_visit_not_found(self):
+        node = NodeVisitor()
 
-    with pytest.raises(Exception):
-        interpreter.eat("MUL")
-
-
-def test_expr_returns_integer():
-    """Expr should return only one integer when is given."""
-    interpreter = Interpreter(Lexer("1"))
-    assert interpreter.expr() == 1
+        with pytest.raises(Exception):
+            node.visit(self.num_token)
 
 
-def test_expr_sum_two_numbers():
-    """Expr should evaluate the expression."""
-    interpreter = Interpreter(Lexer("2+3"))
-    assert interpreter.expr() == 5
+class TestInterpreter(object):
+
+    def test_sum(self):
+        assert interpret("2 + 3") == 5
+        assert interpret("(2 + 3)") == 5
+        assert interpret("2+3") == 5
+
+    def test_interpreter_sum_with_precedence(self):
+        assert interpret("2 * (2 + 3)") == 10
+        assert interpret("2 + 4 * 3") == 14
+        assert interpret("2 * 4 + 3") == 11
+
+    def test_interpreter_divides(self):
+        assert interpret("2 / 2") == 1
 
 
-def test_expr_sum_two_numbers_with_space_betwen_them():
-    """Expr should evaluate the expression correctly."""
-    interpreter = Interpreter(Lexer("12 + 50"))
-    assert interpreter.expr() == 62
-
-
-def test_expr_subtracts_two_numbers_with_space_betwen_them():
-    """Expr should evaluate the expression correctly."""
-    interpreter = Interpreter(Lexer("12 - 12 - 0"))
-    assert interpreter.expr() == 0
-
-
-def test_expr_multiply():
-    """Expr should evaluate the expression correctly."""
-    interpreter = Interpreter(Lexer("10 * 10 * 10 "))
-    assert interpreter.expr() == 1000
-
-
-def test_expr_multiply_two_numbers_with_space_betwen_them():
-    """Expr should evaluate the expression correctly."""
-    interpreter = Interpreter(Lexer("10 + 10 * 10 "))
-    assert interpreter.expr() == 110
-
-
-def test_expr_divide_two_numbers_with_space_betwen_them():
-    """Expr should evaluate the expression correctly."""
-    interpreter = Interpreter(Lexer("100 / 10 * 1"))
-    assert interpreter.expr() == 10
-
-
-def test_expr_with_nested_operations():
-    """Expr should handle nested operations."""
-    interpreter = Interpreter(Lexer("10 + (10 * 10) / (2 * 5)"))
-    assert interpreter.expr() == 20
+def interpret(expression):
+    """Interpret expression and return the result."""
+    lexer = Lexer(expression)
+    parser = Parser(lexer)
+    interpreter = Interpreter(parser)
+    return interpreter.interpret()

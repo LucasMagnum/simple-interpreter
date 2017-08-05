@@ -23,7 +23,7 @@ unit-tests:  ## Run only unit tests
 	py.test -vsx tests/unit/
 
 unit-tests-coverage:  ## Run coverage on unit tests
-	py.test -vsx tests/unit/ --cov interpreter/ --no-cov-on-fail
+	py.test -vsx tests/unit/ --cov interpreter/ --no-cov-on-fail --cov-report term-missing
 
 behaviour-tests:  ## Run only behaviour tests
 	behave tests/behaviour/

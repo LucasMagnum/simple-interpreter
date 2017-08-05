@@ -2,7 +2,9 @@
 setup.cfg
 setup.py
 interpreter/__init__.py
+interpreter/ast.py
 interpreter/command_line.py
 interpreter/interpreter.py
 interpreter/lexer.py
+interpreter/parser.py
 interpreter/tokens.py

@@ -24,5 +24,8 @@ class Token(object):
             value=repr(self.value)
         )
 
+    def __eq__(self, token):
+        return self.type == token.type and self.value == token.value
+
     def __repr__(self):
         return self.__str__()

@@ -1,5 +1,6 @@
 from .interpreter import Interpreter
 from .lexer import Lexer
+from .parser import Parser
 
 
 def main():
@@ -14,8 +15,9 @@ def main():
             continue
 
         lexer = Lexer(text)
-        interpreter = Interpreter(lexer)
-        result = interpreter.expr()
+        parser = Parser(lexer)
+        interpreter = Interpreter(parser)
+        result = interpreter.interpret()
         print(result)
 
 
