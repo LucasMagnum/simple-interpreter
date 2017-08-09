@@ -38,6 +38,9 @@ class TestInterpreter(object):
     def test_interpreter_divides(self):
         assert interpret("2 / 2") == 1
 
+    def test_interpreter_unary_operations(self):
+        assert interpret("+1 - -1") == 2
+
 
 def interpret(expression):
     """Interpret expression and return the result."""

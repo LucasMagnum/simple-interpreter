@@ -41,3 +41,8 @@ Feature: Calculator simulator
         Given I import the interpreter
         When I type "2 * (3 + 1) * 2" and execute
         Then I should see "16"
+
+    Scenario: unary operations
+        Given I import the interpreter
+        When I type "2 * -1" and execute
+        Then I should see "-2"

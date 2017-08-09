@@ -1,4 +1,4 @@
-from .ast import Num, BinOp
+from .ast import Num, BinOp, UnaryOp
 from .tokens import (
     INTEGER, PLUS, MINUS, MUL, DIV, RPAREN, LPAREN
 )
@@ -24,8 +24,12 @@ class Parser(object):
             self.error()
 
     def factor(self):
-        """factor : INTEGER | LPAREN expr RPAREN"""
+        """factor : (PLUS|MINUS) factor | INTEGER | LPAREN expr RPAREN"""
         token = self.current_token
+        if token.type in (PLUS, MINUS):
+            self.eat(token.type)
+            node = UnaryOp(token, self.factor())
+            return node
         if token.type == INTEGER:
             self.eat(INTEGER)
             return Num(token)
@@ -41,6 +45,7 @@ class Parser(object):
 
         while self.current_token.type in (MUL, DIV):
             token = self.current_token
+
             if token.type == MUL:
                 self.eat(MUL)
             elif token.type == DIV:
@@ -54,7 +59,7 @@ class Parser(object):
         """
         expr   : term ((PLUS | MINUS) term)*
         term   : factor ((MUL | DIV) factor)*
-        factor : INTEGER | LPAREN expr RPAREN
+        factor : (PLUS | MINUS) factor | INTEGER | LPAREN expr RPAREN
         """
         node = self.term()
 

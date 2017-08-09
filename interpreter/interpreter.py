@@ -42,6 +42,13 @@ class Interpreter(NodeVisitor):
         operation = operations[node.op.type]
         return operation(self.visit(node.left), self.visit(node.right))
 
+    def visit_unaryop(self, node):
+        op = node.op.type
+        if op == PLUS:
+            return + self.visit(node.expr)
+        elif op == MINUS:
+            return - self.visit(node.expr)
+
     def visit_num(self, node):
         """Visitor num just return the value."""
         return node.value

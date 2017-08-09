@@ -1,6 +1,6 @@
 import pytest
 
-from interpreter.ast import Num, BinOp
+from interpreter.ast import Num, BinOp, UnaryOp
 from interpreter.lexer import Lexer
 from interpreter.parser import Parser
 from interpreter.tokens import (
@@ -32,6 +32,17 @@ def test_expr_returns_a_num_node():
 
     assert isinstance(node, Num)
     assert node.token == Token(INTEGER, 1)
+
+
+def test_expr_returns_a_unary_node():
+    """Expr should return only num node when it's given."""
+    parser = Parser(Lexer("-1"))
+
+    node = parser.expr()
+
+    assert isinstance(node, UnaryOp)
+    assert node.token == Token(MINUS, "-")
+    assert node.expr.token == Token(INTEGER, 1)
 
 
 def test_expr_sum_two_numbers():
