@@ -25,21 +25,12 @@ class TestNodeVisitor(object):
 
 class TestInterpreter(object):
 
-    def test_sum(self):
-        assert interpret("2 + 3") == 5
-        assert interpret("(2 + 3)") == 5
-        assert interpret("2+3") == 5
+    def test_interpreter_raises_exception_with_invalid_syntax(self):
+        with pytest.raises(Exception):
+            assert interpret("2 + 3") == 5
 
-    def test_interpreter_sum_with_precedence(self):
-        assert interpret("2 * (2 + 3)") == 10
-        assert interpret("2 + 4 * 3") == 14
-        assert interpret("2 * 4 + 3") == 11
-
-    def test_interpreter_divides(self):
-        assert interpret("2 / 2") == 1
-
-    def test_interpreter_unary_operations(self):
-        assert interpret("+1 - -1") == 2
+    def test_interpreter_with_empty_statement(self):
+        assert interpret("BEGIN END.") is None
 
 
 def interpret(expression):

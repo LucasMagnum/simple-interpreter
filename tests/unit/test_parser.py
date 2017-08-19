@@ -172,16 +172,3 @@ def test_expr_with_nested_operations():
     assert right_op.left.token == Token(INTEGER, 2)
     assert right_op.op == Token(PLUS, "+")
     assert right_op.right.token == Token(INTEGER, 5)
-
-
-def test_parse_returns_expr():
-    """Parse method should return expr."""
-    parse_op = Parser(Lexer("1 + 1")).parse()
-    expr_op = Parser(Lexer("1 + 1")).expr()
-
-    assert isinstance(parse_op, BinOp)
-    assert isinstance(expr_op, BinOp)
-
-    assert parse_op.left.token == expr_op.left.token
-    assert parse_op.op == expr_op.op
-    assert parse_op.right.token == expr_op.right.token

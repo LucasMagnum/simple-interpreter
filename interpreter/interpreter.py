@@ -21,6 +21,7 @@ class NodeVisitor(object):
 
 class Interpreter(NodeVisitor):
     """Interpreter using node visitor pattern."""
+    GLOBAL_SCOPE = {}
 
     def __init__(self, parser):
         self.parser = parser
@@ -52,3 +53,23 @@ class Interpreter(NodeVisitor):
     def visit_num(self, node):
         """Visitor num just return the value."""
         return node.value
+
+    def visit_compound(self, node):
+        for child in node.children:
+            self.visit(child)
+
+    def visit_assign(self, node):
+        var_name = node.left.value
+        self.GLOBAL_SCOPE[var_name] = self.visit(node.right)
+
+    def visit_var(self, node):
+        var_name = node.value
+        val = self.GLOBAL_SCOPE.get(var_name)
+
+        if val is None:
+            raise NameError(repr(var_name))
+        else:
+            return val
+
+    def visit_noop(self, node):
+        pass
