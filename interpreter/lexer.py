@@ -49,10 +49,13 @@ class Lexer(object):
     def _id(self):
         """Handle identifiers and reserved keywords."""
         result = ''
-        while self.current_char is not None and self.current_char.isalnum():
+        while (self.current_char is not None and
+               self.current_char.isalnum() or
+               self.current_char.startswith('_')):
             result += self.current_char
             self.advance()
 
+        result = result.upper()
         return RESERVERD_KEYWORDS.get(result, Token(ID, result))
 
     def get_next_token(self):
