@@ -4,5 +4,5 @@ Feature: Simple code interpreter
 
     Scenario: interpreter runs with the empty statement
         Given I import the interpreter
-        When I type "BEGIN END." and execute
+        When I type "PROGRAM test; BEGIN END." and execute
         Then I should see "None"

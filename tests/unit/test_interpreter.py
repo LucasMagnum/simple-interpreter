@@ -30,7 +30,7 @@ class TestInterpreter(object):
             assert interpret("2 + 3") == 5
 
     def test_interpreter_with_empty_statement(self):
-        assert interpret("BEGIN END.") is None
+        assert interpret("PROGRAM test; BEGIN END.") is None
 
 
 def interpret(expression):

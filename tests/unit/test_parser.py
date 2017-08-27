@@ -4,7 +4,7 @@ from interpreter.ast import Num, BinOp, UnaryOp
 from interpreter.lexer import Lexer
 from interpreter.parser import Parser
 from interpreter.tokens import (
-    Token, INTEGER, PLUS, MINUS, MUL, DIV
+    Token, INTEGER_CONST, PLUS, MINUS, MUL, FLOAT_DIV
 )
 
 
@@ -31,7 +31,7 @@ def test_expr_returns_a_num_node():
     node = parser.expr()
 
     assert isinstance(node, Num)
-    assert node.token == Token(INTEGER, 1)
+    assert node.token == Token(INTEGER_CONST, 1)
 
 
 def test_expr_returns_a_unary_node():
@@ -42,7 +42,7 @@ def test_expr_returns_a_unary_node():
 
     assert isinstance(node, UnaryOp)
     assert node.token == Token(MINUS, "-")
-    assert node.expr.token == Token(INTEGER, 1)
+    assert node.expr.token == Token(INTEGER_CONST, 1)
 
 
 def test_expr_sum_two_numbers():
@@ -55,9 +55,9 @@ def test_expr_sum_two_numbers():
     assert isinstance(node.left, Num)
     assert isinstance(node.right, Num)
 
-    assert node.left.token == Token(INTEGER, 2)
+    assert node.left.token == Token(INTEGER_CONST, 2)
     assert node.op == Token(PLUS, "+")
-    assert node.right.token == Token(INTEGER, 3)
+    assert node.right.token == Token(INTEGER_CONST, 3)
 
 
 def test_expr_parse_two_numbers_with_space_betwen_them():
@@ -76,12 +76,12 @@ def test_expr_parse_two_numbers_with_space_betwen_them():
     assert isinstance(node.right, Num)
 
     left_op = node.left
-    assert left_op.left.token == Token(INTEGER, 12)
+    assert left_op.left.token == Token(INTEGER_CONST, 12)
     assert left_op.op == Token(MINUS, "-")
-    assert left_op.right.token == Token(INTEGER, 11)
+    assert left_op.right.token == Token(INTEGER_CONST, 11)
 
     right_op = node.right
-    assert right_op.token == Token(INTEGER, 0)
+    assert right_op.token == Token(INTEGER_CONST, 0)
 
 
 def test_expr_multiply():
@@ -100,12 +100,12 @@ def test_expr_multiply():
     assert isinstance(node.right, Num)
 
     left_op = node.left
-    assert left_op.left.token == Token(INTEGER, 10)
+    assert left_op.left.token == Token(INTEGER_CONST, 10)
     assert left_op.op == Token(MUL, "*")
-    assert left_op.right.token == Token(INTEGER, 5)
+    assert left_op.right.token == Token(INTEGER_CONST, 5)
 
     right_op = node.right
-    assert right_op.token == Token(INTEGER, 2)
+    assert right_op.token == Token(INTEGER_CONST, 2)
 
 
 def test_expr_sum_with_precedence():
@@ -124,14 +124,14 @@ def test_expr_sum_with_precedence():
     assert isinstance(node.right, BinOp)
 
     left_op = node.left
-    assert left_op.token == Token(INTEGER, 1)
+    assert left_op.token == Token(INTEGER_CONST, 1)
 
     assert node.op == Token(PLUS, "+")
 
     right_op = node.right
-    assert right_op.left.token == Token(INTEGER, 2)
+    assert right_op.left.token == Token(INTEGER_CONST, 2)
     assert right_op.op == Token(MUL, "*")
-    assert right_op.right.token == Token(INTEGER, 3)
+    assert right_op.right.token == Token(INTEGER_CONST, 3)
 
 
 def test_expr_divide_two_numbers_with_space_betwen_them():
@@ -144,9 +144,9 @@ def test_expr_divide_two_numbers_with_space_betwen_them():
     assert isinstance(node.left, Num)
     assert isinstance(node.right, Num)
 
-    assert node.left.token == Token(INTEGER, 100)
-    assert node.op == Token(DIV, "/")
-    assert node.right.token == Token(INTEGER, 10)
+    assert node.left.token == Token(INTEGER_CONST, 100)
+    assert node.op == Token(FLOAT_DIV, "/")
+    assert node.right.token == Token(INTEGER_CONST, 10)
 
 
 def test_expr_with_nested_operations():
@@ -164,11 +164,11 @@ def test_expr_with_nested_operations():
     assert isinstance(node.right, BinOp)
 
     left_op = node.left
-    assert left_op.token == Token(INTEGER, 10)
+    assert left_op.token == Token(INTEGER_CONST, 10)
 
     assert node.op == Token(MUL, "*")
 
     right_op = node.right
-    assert right_op.left.token == Token(INTEGER, 2)
+    assert right_op.left.token == Token(INTEGER_CONST, 2)
     assert right_op.op == Token(PLUS, "+")
-    assert right_op.right.token == Token(INTEGER, 5)
+    assert right_op.right.token == Token(INTEGER_CONST, 5)

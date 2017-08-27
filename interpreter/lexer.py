@@ -1,9 +1,15 @@
 from .tokens import (
-    Token, INTEGER, PLUS, MINUS, MUL, DIV, RPAREN, LPAREN, EOF,
-    BEGIN, END, ASSIGN, ID, SEMI, DOT
+    Token, INTEGER, PLUS, MINUS, MUL, INTEGER_DIV, RPAREN, LPAREN, EOF,
+    BEGIN, END, ASSIGN, ID, SEMI, DOT, PROGRAM, VAR, REAL,
+    FLOAT_DIV, COLON, COMMA
 )
 
 RESERVERD_KEYWORDS = {
+    PROGRAM: Token(PROGRAM, PROGRAM),
+    VAR: Token(VAR, VAR),
+    'DIV': Token(INTEGER_DIV, 'DIV'),
+    INTEGER: Token(INTEGER, INTEGER),
+    REAL: Token(REAL, REAL),
     BEGIN: Token(BEGIN, BEGIN),
     END: Token(END, END)
 }
@@ -38,13 +44,34 @@ class Lexer(object):
         while self.current_char is not None and self.current_char.isspace():
             self.advance()
 
-    def integer(self):
-        """Return a (multidigit) integer consumed from the input."""
+    def skip_comment(self):
+        while self.current_char != '}':
+            self.advance()
+        self.advance()  # the closing curly brace
+
+    def number(self):
+        """Return a (multidigit) integer or float consumed from the input."""
         result = ''
         while self.current_char is not None and self.current_char.isdigit():
             result += self.current_char
             self.advance()
-        return int(result)
+
+        if self.current_char == '.':
+            result += self.current_char
+            self.advance()
+
+            while (
+                self.current_char is not None and
+                self.current_char.isdigit()
+            ):
+                result += self.current_char
+                self.advance()
+
+            token = Token('REAL_CONST', float(result))
+        else:
+            token = Token('INTEGER_CONST', int(result))
+
+        return token
 
     def _id(self):
         """Handle identifiers and reserved keywords."""
@@ -69,11 +96,16 @@ class Lexer(object):
                 self.skip_whitespace()
                 continue
 
-            if self.current_char.isdigit():
-                return Token(INTEGER, self.integer())
+            if self.current_char == '{':
+                self.advance()
+                self.skip_comment()
+                continue
 
             if self.current_char.isalpha():
                 return self._id()
+
+            if self.current_char.isdigit():
+                return self.number()
 
             if self.current_char == ':' and self.peek() == '=':
                 self.advance()
@@ -83,6 +115,14 @@ class Lexer(object):
             if self.current_char == ';':
                 self.advance()
                 return Token(SEMI, ';')
+
+            if self.current_char == ':':
+                self.advance()
+                return Token(COLON, ':')
+
+            if self.current_char == ',':
+                self.advance()
+                return Token(COMMA, ',')
 
             if self.current_char == '+':
                 self.advance()
@@ -98,7 +138,7 @@ class Lexer(object):
 
             if self.current_char == '/':
                 self.advance()
-                return Token(DIV, '/')
+                return Token(FLOAT_DIV, '/')
 
             if self.current_char == '(':
                 self.advance()

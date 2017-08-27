@@ -1,6 +1,6 @@
 import operator
 
-from .tokens import PLUS, MINUS, MUL, DIV
+from .tokens import PLUS, MINUS, MUL, INTEGER_DIV, FLOAT_DIV
 
 
 class NodeVisitor(object):
@@ -31,13 +31,28 @@ class Interpreter(NodeVisitor):
         tree = self.parser.parse()
         return self.visit(tree)
 
+    def visit_program(self, node):
+        self.visit(node.block)
+
+    def visit_block(self, node):
+        for declaration in node.declarations:
+            self.visit(declaration)
+        self.visit(node.compound_statement)
+
+    def visit_vardecl(self, node):
+        pass
+
+    def visit_type(self, node):
+        pass
+
     def visit_binop(self, node):
         """Visit BinOp nodes."""
         operations = {
             PLUS: operator.add,
             MINUS: operator.sub,
             MUL: operator.mul,
-            DIV: operator.truediv
+            INTEGER_DIV: operator.floordiv,
+            FLOAT_DIV: operator.truediv
         }
 
         operation = operations[node.op.type]
